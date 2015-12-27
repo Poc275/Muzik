@@ -1,0 +1,22 @@
+extends layout
+
+block content
+    h1 Signup
+    
+    // show any messages that come back with authentication
+    if (message.length > 0)
+      #alert
+        p= message
+
+    // signup form
+    form(action='/signup', method='POST')
+        label Email 
+          input(type='email', name='email', required)
+        label Password 
+          input(type='password', name='password', required)
+        input(type='submit', value='Signup')
+
+    p Already registered?
+      a(href='/login') Login
+    p Or go 
+      a(href='/') home

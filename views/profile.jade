@@ -1,0 +1,20 @@
+extends layout
+
+block content
+    h1 Profile page
+    p: a(href='/logout') Logout
+    
+    h2 Welcome
+    p= user._node._id
+    p= user._node.labels
+    p= user._node.properties.username
+    p= user._node.properties.password
+
+    canvas#player
+
+    canvas#track
+
+    p#output
+
+    script(src="/js/web-audio-viz.js")
+    script(src="/js/canvas-shapes.js")
