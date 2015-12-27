@@ -10,11 +10,13 @@ block content
     p= user._node.properties.username
     p= user._node.properties.password
 
-    canvas#player
-
-    canvas#track
+    //canvas#player
+    //canvas#track
+    canvas#project
 
     p#output
 
-    script(src="/js/web-audio-viz.js")
-    script(src="/js/canvas-shapes.js")
+    //script(src="/js/web-audio-viz.js")
+    //script(src="/js/canvas-shapes.js")
+    script(src="https://code.createjs.com/easeljs-0.8.2.min.js")
+    script(src="/js/easeljs-test.js")
