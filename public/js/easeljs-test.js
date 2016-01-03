@@ -1,9 +1,9 @@
 window.onload = init;
 
+// e.g. project/tracks, this would be retrieved from the DB
 var tracks = [new Track(), 
   new Track(70, 'lightskyblue'),
   new Track(80, '#00FF00')];
-
 var project = new Project(tracks);
 
 var log = document.getElementById('output');
@@ -15,11 +15,24 @@ function init() {
 	for (var i = 0; i < tracks.length; i++) {
 		var track = new createjs.Shape();
 		track.graphics.beginFill(tracks[i].fill).drawRect(tracks[i].start, tracks[i].yPos, tracks[i].length, tracks[i].height);
+
+		track.on("mousedown", function(e) {
+			// retrieve position of mouse selection and set as transform point
+			// (regX) so that the tracks move smoothly
+			var target = e.currentTarget;
+			var localToTrack = target.globalToLocal(e.stageX, e.stageY);
+			target.regX = localToTrack.x;
+		});
+
 		track.on("pressmove", function(e) {
-			e.target.x = e.stageX;
-			console.log("target x: " + e.target.x + " stage x: " + e.stageX + " raw x: " + e.rawX);
+			var min = e.stageX - e.currentTarget.regX;
+			var max = e.stageX + e.currentTarget.regX;
+			console.log(e.currentTarget.regX + " min: " + min + " max: " + max);
+
+			e.currentTarget.x = e.stageX;
 			stage.update();
 		});
+
 		stage.addChild(track);
 	}
 
@@ -39,14 +52,6 @@ function Track(length, fill) {
 Track.prototype.draw = function(ctx) {
 	ctx.fillStyle = this.fill;
 	ctx.fillRect(this.start, this.yPos, this.length, this.height);
-}
-
-// Determine if a point is inside the track's bounds
-Track.prototype.contains = function(mx, my) {
-  // All we have to do is make sure the Mouse X,Y fall in the area between
-  // the track's X and (X + Width) and its Y and (Y + Height)
-  return  (this.start <= mx) && (this.start + this.length >= mx) &&
-          (this.yPos <= my) && (this.yPos + this.height >= my);
 }
 
 
