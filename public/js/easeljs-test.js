@@ -6,30 +6,36 @@ var tracks = [new Track(),
   new Track(80, '#00FF00')];
 var project = new Project(tracks);
 
-var log = document.getElementById('output');
+var canvas;
+var stage;
+var right;
+var left;
 
 
 function init() {
-	var stage = new createjs.Stage("project");
+	canvas = document.getElementById("project");
+	stage = new createjs.Stage("project");
+	stage.mouseMoveOutside = true;
+	stage.snapToPixel = true;
+	left = 0;
+	right = canvas.width;
 
-	for (var i = 0; i < tracks.length; i++) {
+	for(var i = 0; i < tracks.length; i++) {
 		var track = new createjs.Shape();
 		track.graphics.beginFill(tracks[i].fill).drawRect(tracks[i].start, tracks[i].yPos, tracks[i].length, tracks[i].height);
+		track.setBounds(tracks[i].start, tracks[i].yPos, tracks[i].length, tracks[i].height);
 
 		track.on("mousedown", function(e) {
 			// retrieve position of mouse selection and set as transform point
 			// (regX) so that the tracks move smoothly
-			var target = e.currentTarget;
-			var localToTrack = target.globalToLocal(e.stageX, e.stageY);
-			target.regX = localToTrack.x;
+			var localToTrack = e.currentTarget.globalToLocal(e.stageX, e.stageY);
+			e.currentTarget.regX = localToTrack.x;
 		});
 
 		track.on("pressmove", function(e) {
-			var min = e.stageX - e.currentTarget.regX;
-			var max = e.stageX + e.currentTarget.regX;
-			console.log(e.currentTarget.regX + " min: " + min + " max: " + max);
+			e.currentTarget.x = Math.max(stage.x + e.currentTarget.regX, 
+				Math.min(stage.x + right - e.currentTarget.getBounds().width + e.currentTarget.regX, e.stageX));
 
-			e.currentTarget.x = e.stageX;
 			stage.update();
 		});
 
@@ -49,10 +55,10 @@ function Track(length, fill) {
 	this.fill = fill || '#AAAAAA';
 }
 
-Track.prototype.draw = function(ctx) {
-	ctx.fillStyle = this.fill;
-	ctx.fillRect(this.start, this.yPos, this.length, this.height);
-}
+// Track.prototype.draw = function(ctx) {
+// 	ctx.fillStyle = this.fill;
+// 	ctx.fillRect(this.start, this.yPos, this.length, this.height);
+// }
 
 
 // Object that represents a project/song
@@ -60,7 +66,7 @@ function Project(tracks) {
   this.tracks = tracks;
 
   // calculate y positions
-  for (var i = 0; i < tracks.length; i++) {
+  for(var i = 0; i < tracks.length; i++) {
     tracks[i].yPos = i * tracks[i].height;
   }
 }
