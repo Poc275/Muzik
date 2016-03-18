@@ -1,11 +1,18 @@
 window.onload = init;
 
 // get from DB
+// var tracks = [
+//   new Track('Guitar', '../audio/under-the-bridge-guitar-track.mp3', 'red'),
+//   new Track('Drums', '../audio/under-the-bridge-drum-track.mp3', 'grey'),
+//   new Track('Bass', '../audio/under-the-bridge-bass-track.mp3', 'blue'),
+//   new Track('Vocals', '../audio/under-the-bridge-vocal-track.mp3', 'green')
+// ]
+
 var tracks = [
-  new Track('Guitar', '../audio/under-the-bridge-guitar-track.mp3', 'red'),
-  new Track('Drums', '../audio/under-the-bridge-drum-track.mp3', 'grey'),
-  new Track('Bass', '../audio/under-the-bridge-bass-track.mp3', 'blue'),
-  new Track('Vocals', '../audio/under-the-bridge-vocal-track.mp3', 'green')
+  new Track('Guitar', '../audio/rem-lmr-guitar.mp3', 'red'),
+  new Track('Drums', '../audio/rem-lmr-drums.mp3', 'grey'),
+  new Track('Bass', '../audio/rem-lmr-bass.mp3', 'blue'),
+  new Track('Vocals', '../audio/rem-lmr-vox.mp3', 'green')
 ]
 
 var canvas;
@@ -15,6 +22,10 @@ var left;
 
 var playButton;
 var stopButton;
+
+var playHead;
+var playHeadNormalisationFactor;
+var animationFrameId;
 
 
 function init() {
@@ -31,6 +42,12 @@ function init() {
 	stage.snapToPixel = true;
 	left = 0;
 	right = canvas.width;
+
+	// add playhead
+	playHead = new createjs.Shape();
+	playHead.graphics.beginStroke("orange");
+	playHead.graphics.moveTo(0, 0).lineTo(0, tracks.length * 50);
+	stage.addChild(playHead);
 
 	createjs.Sound.addEventListener('fileload', soundsLoaded);
 
@@ -86,7 +103,11 @@ function soundsLoaded(evt) {
 		}
 	})
 
+	// what if track couldn't be found?
 	track.instance = createjs.Sound.createInstance(track.title);
+	playHeadNormalisationFactor = canvas.width / (track.instance.duration / 1000);
+
+	console.log(playHeadNormalisationFactor);
 
 	console.log('soundsLoaded called');
 }
@@ -99,13 +120,16 @@ function playButtonClick(evt) {
 			playButton.value = 'Pause';
 			playButton.innerHTML = 'Pause';
 		})
+		animationFrameId = requestAnimationFrame(syncPlayhead);
 	} else if (playButton.value === 'Pause') {
 		tracks.forEach(function(track) {
 			track.instance.paused = true;
 			playButton.value = 'Play';
 			playButton.innerHTML = 'Play';
 		})
+		window.cancelAnimationFrame(animationFrameId);
 	}
+
 }
 
 
@@ -113,4 +137,14 @@ function stopButtonClick(evt) {
 	createjs.Sound.stop();
 	playButton.value = 'Play';
 	playButton.innerHTML = 'Play';
+
+	window.cancelAnimationFrame(animationFrameId);
+}
+
+
+function syncPlayhead() {
+	console.log(tracks[0].instance.position / 1000 * playHeadNormalisationFactor);
+	playHead.x = tracks[0].instance.position / 1000 * playHeadNormalisationFactor;
+	stage.update();
+	animationFrameId = requestAnimationFrame(syncPlayhead);
 }
