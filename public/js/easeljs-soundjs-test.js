@@ -15,6 +15,8 @@ var tracks = [
   new Track('Vocals', '../audio/rem-lmr-vox.mp3', 'green')
 ]
 
+var project = new Project(tracks);
+
 var canvas;
 var stage;
 var right;
@@ -29,6 +31,18 @@ var animationFrameId;
 
 
 function init() {
+	// preload audio
+	var queue = new createjs.LoadQueue();
+	queue.installPlugin(createjs.Sound);
+	queue.addEventListener("fileload", trackAudioLoaded);
+	queue.addEventListener("complete", projectAudioLoaded);
+	queue.loadManifest([
+			{id: tracks[0]._title, src: tracks[0]._url},
+			{id: tracks[1]._title, src: tracks[1]._url},
+			{id: tracks[2]._title, src: tracks[2]._url},
+			{id: tracks[3]._title, src: tracks[3]._url}
+		]);
+
 	canvas = document.getElementById("project");
 	// set canvas size
 	// canvas.width = Math.max.apply(null, tracks.map(function(track) {
@@ -48,8 +62,6 @@ function init() {
 	playHead.graphics.beginStroke("orange");
 	playHead.graphics.moveTo(0, 0).lineTo(0, tracks.length * 50);
 
-	createjs.Sound.addEventListener('fileload', soundsLoaded);
-
 	playButton = document.getElementById('play');
 	stopButton = document.getElementById('stop');
 
@@ -63,15 +75,12 @@ function init() {
 
 	for(var i = 0; i < tracks.length; i++) {
 		var track = new createjs.Shape();
-		track.name = tracks[i].title;
+		track.name = tracks[i]._title;
 
-		// register sounds
-		createjs.Sound.registerSound(tracks[i].url, tracks[i].title);
+		tracks[i]._yPosition = i * tracks[i]._height;
 
-		tracks[i].yPosition = i * tracks[i].height;
-
-		track.graphics.beginFill(tracks[i].fill).drawRect(tracks[i].startTime, tracks[i].yPosition, tracks[i].length, tracks[i].height);
-		track.setBounds(tracks[i].startTime, tracks[i].yPosition, tracks[i].length, tracks[i].height);
+		track.graphics.beginFill(tracks[i]._fill).drawRect(tracks[i]._startTime, tracks[i]._yPosition, tracks[i]._length, tracks[i]._height);
+		track.setBounds(tracks[i]._startTime, tracks[i]._yPosition, tracks[i]._length, tracks[i]._height);
 
 		// MOUSE EVENTS
 		track.on("mousedown", function(e) {
@@ -111,13 +120,14 @@ function init() {
 
 			// which track was moved?
 			var track = tracks.find(function(track) {
-				if (track.title === e.currentTarget.name) {
+				if (track._title === e.currentTarget.name) {
 					return track;
 				}
 			});
 
 			// update track start time
-			track.instance.startTime = 20000;
+			// 10s
+			track._startTime = 10000;
 
 		});
 
@@ -130,42 +140,51 @@ function init() {
 	stage.update();
 }
 
-// note: this will run for every sound that is loaded
-// need a way of waiting until ALL sounds are loaded - preload.js?
-function soundsLoaded(evt) {
-	playButton.disabled = false;
-	stopButton.disabled = false;
 
+function trackAudioLoaded(evt) {
+	// need to handle possibility of find function not returning a track
 	var track = tracks.find(function(track) {
-		if (track.title === evt.id) {
+		if (track._title === evt.item.id) {
 			return track;
 		}
 	})
 
-	// what if track couldn't be found?
-	track.instance = createjs.Sound.createInstance(track.title);
-	playHeadNormalisationFactor = canvas.width / (track.instance.duration / 1000);
+	track._instance = createjs.Sound.createInstance(track._title);
 
-	console.log(playHeadNormalisationFactor);
+	console.log(track._title + " loaded. Duration: " + track._instance.duration);
+}
 
-	console.log('soundsLoaded called');
+
+function projectAudioLoaded(evt) {
+	playButton.disabled = false;
+	stopButton.disabled = false;
+
+	project.UpdateProjectDuration();
+
+	playHeadNormalisationFactor = canvas.width / (project._tracks[0]._instance.duration / 1000);
+
+	console.log("Project loaded");
 }
 
 
 function playButtonClick(evt) {
 	if (playButton.value === 'Play') {
 		tracks.forEach(function(track) {
-			track.instance.play();
-			playButton.value = 'Pause';
-			playButton.innerHTML = 'Pause';
+			// apply play properties delay, volume etc.
+			var ppc = new createjs.PlayPropsConfig().set({
+				delay: track._startTime
+			});
+			track._instance.play(ppc);
 		})
+		playButton.value = 'Pause';
+		playButton.innerHTML = 'Pause';
 		animationFrameId = requestAnimationFrame(syncPlayhead);
 	} else if (playButton.value === 'Pause') {
 		tracks.forEach(function(track) {
-			track.instance.paused = true;
-			playButton.value = 'Play';
-			playButton.innerHTML = 'Play';
+			track._instance.paused = true;
 		})
+		playButton.value = 'Play';
+		playButton.innerHTML = 'Play';
 		window.cancelAnimationFrame(animationFrameId);
 	}
 
@@ -182,9 +201,8 @@ function stopButtonClick(evt) {
 
 
 function syncPlayhead() {
-	// console.log(tracks[0].instance.position / 1000 * playHeadNormalisationFactor);
-	console.log(tracks[0].instance.position);
-	playHead.x = tracks[0].instance.position / 1000 * playHeadNormalisationFactor;
+	playHead.x = project._tracks[0]._instance.position / 1000 * playHeadNormalisationFactor;
+	console.log(playHead.x);
 	stage.update();
 	animationFrameId = requestAnimationFrame(syncPlayhead);
 }

@@ -1,14 +1,10 @@
 function Track(name, url, fill) {
-	this.startTime = 0;
-	this.yPosition = 0;
-	this.length = 200;
-	this.height = 50;
-	this.fill = fill || '#AAAAAA';
-	this.title = name;
-	this.url = url;
-	this.instance = null;
+	this._startTime = 0;
+	this._yPosition = 0;
+	this._length = 200;
+	this._height = 50;
+	this._fill = fill || '#AAAAAA';
+	this._title = name;
+	this._url = url;
+	this._instance = null;
 }
-
-// Track.prototype.trackLoaded = function(bufferList) {
-// 	console.log(bufferList);
-// }
