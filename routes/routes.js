@@ -8,8 +8,14 @@ module.exports = function(app, passport) {
 	** HOME PAGE **
 	*/
 	app.get('/', function(req, res) {
-		res.render('index');
+		res.render('index', { message: req.flash('loginMessage') });
 	});
+
+	app.post('/', urlencodedParser, passport.authenticate('local-login', {
+		successRedirect : '/profile',
+		failureRedirect : '/',
+		failureFlash : true
+	}));
 
 
 	/*
@@ -24,7 +30,7 @@ module.exports = function(app, passport) {
 	// process the login form
 	app.post('/login', urlencodedParser, passport.authenticate('local-login', {
 		successRedirect : '/profile',
-		failureRedirect : '/login',
+		failureRedirect : '/',
 		failureFlash : true
 	}));
 

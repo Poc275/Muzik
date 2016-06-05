@@ -163,7 +163,7 @@ function projectAudioLoaded(evt) {
 
 	playHeadNormalisationFactor = canvas.width / (project._tracks[0]._instance.duration / 1000);
 
-	console.log("Project loaded");
+	console.log("Project loaded. Duration: " + project.getDuration());
 }
 
 

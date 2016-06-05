@@ -20,3 +20,7 @@ Project.prototype.UpdateProjectDuration = function() {
 
 	this._duration = duration;
 }
+
+Project.prototype.getDuration = function() {
+	return this._duration;
+}

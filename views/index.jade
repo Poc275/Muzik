@@ -1,9 +1,187 @@
-extends layout
+doctype html
+html(class='no-js')
+  head
+      meta(charset='utf-8')
+      meta(http-equiv='X-UA-Compatible', content='IE=edge')
+      meta(name='viewport', content='width=device-width, initial-scale=1')
+      meta(name='description', content='')
 
-block content
-    h1 Muzik
-    h2 A free network for musicians and music professionals
-    p Login or Register with:
-    p: a(href='/login') Local Login
-    p: a(href='signup') Local Signup
-    P: a(href='/auth/facebook') Facebook
+      title Welcome to Muzik
+
+      link(rel='stylesheet', href='/css/bootstrap.min.css')
+      link(rel='stylesheet', href='/css/grayscale.css')
+      link(rel='stylesheet', href='/css/lightslider.min.css')
+      link(href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css')
+      link(href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css')
+
+      script(src='https://use.fontawesome.com/bc36022cc0.js')
+
+  body#page-top(data-spy='scroll', data-target='.navbar-fixed-top')
+
+    nav(class=['navbar', 'navbar-custom', 'navbar-fixed-top'], role='navigation')
+        div.container
+            div.navbar-header
+                button.navbar-toggle(data-toggle='collapse', data-target='.navbar-main-collapse', type='button')
+                    i(class=['fa', 'fa-bars'])
+                a(href='#page-top', class=['navbar-brand', 'page-scroll'])
+                    i(class=['fa', 'fa-play-circle'])
+                    span.light  MUZIK
+            div(class=['collapse', 'navbar-collapse', 'navbar-right', 'navbar-main-collapse'])
+                ul(class=['nav', 'navbar-nav'])
+                    li.hidden: a(href='#page-top')
+                    li: a.page-scroll(href='/signup') Signup
+                    li: a.page-scroll(href='/auth/facebook') Facebook
+                    li: a.page-scroll(href='#about') About
+                    li: a.page-scroll(href='#charts') Charts
+                    li: a.page-scroll(href='#explore') Explore
+                    li: a.page-scroll(href='#social') News
+
+    header.intro
+        div.intro-body
+            div.container
+                div.row
+                    div.col-md-6
+                        h1.brand-heading MUZIK
+                        p.intro-text A free network for musicians and music professionals.                        
+
+                    div.col-md-6
+                        if (message.length > 0)
+                            .alert.alert-danger.alert-dismissible.fade-in(role='alert')
+                                button.close(type='button' data-dismiss='alert' aria-label='Close')
+                                    span(aria-hidden='true') x
+                                p= message
+
+                        form(action='/', method='POST', id='login')
+                            div.form-group
+                                label(for='email') Email
+                                input(type='email', class='form-control', id='email', name='email', placeholder='Email', required)
+                            div.form-group
+                                label(for='password') Password
+                                input(type='password', class='form-control', id='password', name='password', placeholder='Password', required)
+                            input(type='submit', class=['btn', 'btn-default'], value='Log In')
+
+                    div(class=['col-md-12', 'text-center'])
+                        a(class=['btn', 'btn-circle', 'page-scroll'], href='#about')
+                            i(class=['fa', 'fa-angle-double-down', 'animated'])
+
+    section#about(class=['container', 'content-section', 'text-center'])
+        div.row
+            div(class=['col-lg-8', 'col-lg-offset-2'])
+                h2 What is Muzik?
+                p Muzik is a social network that connects musicians allowing them to collaborate on new music
+                div.row
+                    div.col-sm-4
+                        span(class=['glyphicon', 'glyphicon-search'], aria-hidden='true')
+                        h3 Discover
+                        p Browse the network to look for musicians or professionals that can help your new project.
+
+                    div.col-sm-4
+                        span(class=['glyphicon', 'glyphicon-log-in'], aria-hidden='true')
+                        h3 Join
+                        p Join to contact fellow musicians and to discuss new projects.
+
+                    div.col-sm-4
+                        span(class=['glyphicon', 'glyphicon-music'], aria-hidden='true')
+                        h3 Collaborate
+                        p Create and join projects and upload your work to create the next big hit.
+
+    section#charts(class=['container', 'content-section', 'text-center'])
+        div.row
+            div(class=['col-lg-12'])
+                h2 Muzik Charts
+                p Check out the hottest tracks on the network right now.
+
+                ul#muzik-charts
+                    li
+                        img(src='../img/chart-pic-placeholder.png', alt='chart artwork')
+                        h3 Artist - Song
+                        p This is number one
+                    li
+                        img(src='../img/chart-pic-placeholder.png', alt='chart artwork')
+                        h3 Artist - Song
+                        p This is number two
+
+                    li
+                        img(src='../img/chart-pic-placeholder.png', alt='chart artwork')
+                        h3 Artist - Song
+                        p This is number three
+
+                    li
+                        img(src='../img/chart-pic-placeholder.png', alt='chart artwork')
+                        h3 Artist - Song
+                        p This is number four
+                    li
+                        img(src='../img/chart-pic-placeholder.png', alt='chart artwork')
+                        h3 Artist - Song
+                        p This is number five
+
+                    li
+                        img(src='../img/chart-pic-placeholder.png', alt='chart artwork')
+                        h3 Artist - Song
+                        p This is number six
+
+                    li
+                        img(src='../img/chart-pic-placeholder.png', alt='chart artwork')
+                        h3 Artist - Song
+                        p This is number seven
+                    li
+                        img(src='../img/chart-pic-placeholder.png', alt='chart artwork')
+                        h3 Artist - Song
+                        p This is number eight
+
+                    li
+                        img(src='../img/chart-pic-placeholder.png', alt='chart artwork')
+                        h3 Artist - Song
+                        p This is number nine
+
+                    li
+                        img(src='../img/chart-pic-placeholder.png', alt='chart artwork')
+                        h3 Artist - Song
+                        p This is number ten
+
+    section#explore(class=['container', 'content-section', 'text-center'])
+        div.row
+            div(class=['col-lg-12'])
+                h2 Discover &amp; Explore
+                p Looking for that final piece of the jigsaw for your next killer tune? Look no further.
+                div.btn-group
+                    button(type='button', class=['btn', 'btn-default', 'btn-lg', 'dropdown-toggle'], data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') I'm looking for 
+                        span.caret
+                    ul.dropdown-menu
+                        li: a(href='#') Vocalists
+                        li: a(href='#') Drummers
+                        li: a(href='#') Guitarists
+                        li: a(href='#') Pianists
+                        li: a(href='#') Sound Engineers
+                        li: a(href='#') Producers
+                        li: a(href='#') Promoters
+
+    section#social(class=['container', 'content-section', 'text-center'])
+        div.row
+            div(class=['col-lg-12'])
+                h2 Latest News
+                p Muzik is currently being constructed, keep revisiting for updates, check us out on social media, or #[a(href='mailto:poc275@gmail.com') drop us a line].
+                ul(class=['list-inline', 'banner-social-buttons'])
+                    li
+                        a(href='#', class=['btn', 'btn-default', 'btn-lg'])
+                            i(class=['fa', 'fa-twitter', 'fa-fw'])
+                            span.network-name  Twitter
+                    li
+                        a(href='#', class=['btn', 'btn-default', 'btn-lg'])
+                            i(class=['fa', 'fa-google-plus', 'fa-fw'])
+                            span.network-name  Google+
+                    li
+                        a(href='#', class=['btn', 'btn-default', 'btn-lg'])
+                            i(class=['fa', 'fa-facebook', 'fa-fw'])
+                            span.network-name  Facebook
+
+    footer
+        div(class=['container', 'text-center'])
+            p Copyright &copy; Muzik 2016
+
+
+    script(src='../js/static/jquery.js')
+    script(src='../js/static/bootstrap.min.js')
+    script(src='../js/static/jquery.easing.min.js')
+    script(src='../js/static/lightslider.min.js')
+    script(src='../js/static/grayscale.js')
