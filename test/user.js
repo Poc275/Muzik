@@ -85,10 +85,18 @@ describe('User model:', function () {
     it('Create test user A', function (next) {
         var username = 'testUserA';
         var password = 'testPasswordA';
+        var city = 'test city';
+        var country = 'test country';
+        var genres = ['Asian', 'Experimental', 'Jazz', 'Latin'];
+        var skills = ['Vocalist', 'Writer'];
 
         User.create({
 			username: username,
-			password: password
+			password: password,
+            city: city,
+            country: country,
+            genres: genres,
+            skills: skills
 		}, function(err, user) {
 			if (err) {
 				return next(err);
@@ -96,6 +104,15 @@ describe('User model:', function () {
 
 			expectUser(user);
 			expect(user._node.properties.username).to.equal(username);
+            expect(user._node.properties.city).to.equal(city);
+            expect(user._node.properties.country).to.equal(country);
+            expect(user._node.properties.country).to.equal(country);
+            expect(user._node.properties.genres).to.deep.equal(genres);
+            expect(user._node.properties.skills).to.deep.equal(skills);
+
+            // array lengths
+            expect(user._node.properties.genres).to.have.lengthOf(genres.length);
+            expect(user._node.properties.skills).to.have.lengthOf(skills.length);
 
 			USER_A = user;
 
@@ -137,7 +154,6 @@ describe('User model:', function () {
             if (err) {
             	return next(err);
             }
-            console.log(user);
             expect(user).to.equal(false);
             return next();
         });

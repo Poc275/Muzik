@@ -19,20 +19,20 @@ module.exports = function(app, passport) {
 
 
 	/*
-	** LOGIN **
+	** LOGIN - NOW PART OF HOME PAGE **
 	*/
-	app.get('/login', function(req, res) {
-		// pass in any flash data pertaining to the success
-		// of the login if it exists
-		res.render('login', { message: req.flash('loginMessage') });
-	});
+	// app.get('/login', function(req, res) {
+	// 	// pass in any flash data pertaining to the success
+	// 	// of the login if it exists
+	// 	res.render('login', { message: req.flash('loginMessage') });
+	// });
 
-	// process the login form
-	app.post('/login', urlencodedParser, passport.authenticate('local-login', {
-		successRedirect : '/profile',
-		failureRedirect : '/',
-		failureFlash : true
-	}));
+	// // process the login form
+	// app.post('/login', urlencodedParser, passport.authenticate('local-login', {
+	// 	successRedirect : '/profile',
+	// 	failureRedirect : '/',
+	// 	failureFlash : true
+	// }));
 
 
 	/*

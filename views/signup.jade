@@ -1,22 +1,419 @@
-extends layout
+doctype html
+html(class='no-js')
+  head
+      meta(charset='utf-8')
+      meta(http-equiv='X-UA-Compatible', content='IE=edge')
+      meta(name='viewport', content='width=device-width, initial-scale=1')
+      meta(name='description', content='')
 
-block content
-    h1 Signup
-    
-    // show any messages that come back with authentication
-    if (message.length > 0)
-      #alert
-        p= message
+      title Signup to Muzik
 
-    // signup form
-    form(action='/signup', method='POST')
-        label Email 
-          input(type='email', name='email', required)
-        label Password 
-          input(type='password', name='password', required)
-        input(type='submit', value='Signup')
+      link(rel='stylesheet', href='/css/bootstrap.min.css')
+      link(rel='stylesheet', href='/css/grayscale.css')
+      link(rel='stylesheet', href='/css/bootstrap-social.css')
+      link(href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css')
+      link(href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css')
 
-    p Already registered?
-      a(href='/login') Login
-    p Or go 
-      a(href='/') home
+      script(src='https://use.fontawesome.com/bc36022cc0.js')
+
+  body
+    nav#alt(class=['navbar', 'navbar-custom', 'navbar-fixed-top'], role='navigation')
+      div.container
+        div.navbar-header
+          a(href='/', class=['navbar-brand', 'page-scroll'])
+            i(class=['fa', 'fa-play-circle'])
+            span.light  MUZIK
+
+    section#signup(class=['container', 'content-section', 'text-center'])
+      div.row
+        div(class=['col-md-6', 'col-lg-offset-3'])
+          h1 SIGN UP
+          p Complete the form to begin collaborating
+
+          // show any messages that come back with authentication
+          if (message.length > 0)
+            .alert.alert-danger.alert-dismissible.fade-in(role='alert')
+              button.close(type='button' data-dismiss='alert' aria-label='Close')
+                span(aria-hidden='true') x
+              p= message
+
+          form(name='signup-form', action='/signup', method='POST', onsubmit='return validateForm()')
+            div(class=['input-group', 'margin-bottom-sm'])
+              span.input-group-addon
+                i(class=['fa', 'fa-envelope-o', 'fa-fw'])
+              input(type='email', class='form-control', id='email', name='email', placeholder='Email', required)
+
+            div(class=['input-group', 'margin-bottom-sm'])
+                span.input-group-addon
+                    i(class=['fa', 'fa-key', 'fa-fw'])
+                input(type='password', class='form-control', id='password', name='password', placeholder='Password', required)
+                span#password-toggle(class=['input-group-addon'] onmousedown='togglePassword()')
+                    i(class=['fa', 'fa-fw', 'fa-eye'])
+
+            div(class=['input-group', 'margin-bottom-sm'])
+                span.input-group-addon
+                    i(class=['fa', 'fa-key', 'fa-fw'])
+                input(type='password', class='form-control', id='password-confirm', name='password-confirm', placeholder='Confirm Password', required)
+                span(class=['input-group-addon', 'password-confirm-toggle'])
+                    i(class=['fa', 'fa-fw', 'fa-eye'])
+
+            p About You
+
+            div(class=['checkbox', 'input-group'])
+              label.checkbox-inline
+                input(type='checkbox', value='Vocalist', name='skills')
+                |Vocalist
+              label.checkbox-inline
+                input(type='checkbox', value='Drummer', name='skills')
+                |Drummer
+              label.checkbox-inline
+                input(type='checkbox', value='Guitarist', name='skills')
+                |Guitarist
+              label.checkbox-inline
+                input(type='checkbox', value='Pianist', name='skills')
+                |Pianist
+              label.checkbox-inline
+                input(type='checkbox', value='Sound Engineer', name='skills')
+                |Sound Engineer
+              label.checkbox-inline
+                input(type='checkbox', value='Producer', name='skills')
+                |Producer
+              label.checkbox-inline
+                input(type='checkbox', value='Promoter', name='skills')
+                |Promoter
+              label.checkbox-inline
+                input(type='checkbox', value='Writer', name='skills')
+                |Writer
+              label.checkbox-inline
+                input(type='checkbox', value='DJ', name='skills')
+                |DJ
+
+            p Preferred Genres
+
+            div(class=['checkbox', 'input-group'])
+              label.checkbox-inline
+                input(type='checkbox', value='African', name='genres')
+                |African
+              label.checkbox-inline
+                input(type='checkbox', value='Asian', name='genres')
+                |Asian
+              label.checkbox-inline
+                input(type='checkbox', value='Blues', name='genres')
+                |Blues
+              label.checkbox-inline
+                input(type='checkbox', value='Country', name='genres')
+                |Country
+              label.checkbox-inline
+                input(type='checkbox', value='Electronic', name='genres')
+                |Electronic
+              label.checkbox-inline
+                input(type='checkbox', value='Experimental', name='genres')
+                |Experimental
+              label.checkbox-inline
+                input(type='checkbox', value='Folk', name='genres')
+                |Folk
+              label.checkbox-inline
+                input(type='checkbox', value='Hip-Hop/Rap', name='genres')
+                |Hip-Hop/Rap
+              label.checkbox-inline
+                input(type='checkbox', value='Jazz', name='genres')
+                |Jazz
+              label.checkbox-inline
+                input(type='checkbox', value='Latin', name='genres')
+                |Latin
+              label.checkbox-inline
+                input(type='checkbox', value='Pop', name='genres')
+                |Pop
+              label.checkbox-inline
+                input(type='checkbox', value='R&B/Soul', name='genres')
+                |R&amp;B/Soul
+              label.checkbox-inline
+                input(type='checkbox', value='Reggae/Ska', name='genres')
+                |Reggae/Ska
+              label.checkbox-inline
+                input(type='checkbox', value='Rock', name='genres')
+                |Rock
+
+            div(class=['input-group', 'margin-bottom-sm'])
+              span.input-group-addon
+                    i(class=['fa', 'fa-globe', 'fa-fw'])
+              select.form-control(name='country')
+                option(value='AFG') Afghanistan
+                option(value='ALA') Åland Islands
+                option(value='ALB') Albania
+                option(value='DZA') Algeria
+                option(value='ASM') American Samoa
+                option(value='AND') Andorra
+                option(value='AGO') Angola
+                option(value='AIA') Anguilla
+                option(value='ATA') Antarctica
+                option(value='ATG') Antigua and Barbuda
+                option(value='ARG') Argentina
+                option(value='ARM') Armenia
+                option(value='ABW') Aruba
+                option(value='AUS') Australia
+                option(value='AUT') Austria
+                option(value='AZE') Azerbaijan
+                option(value='BHS') Bahamas
+                option(value='BHR') Bahrain
+                option(value='BGD') Bangladesh
+                option(value='BRB') Barbados
+                option(value='BLR') Belarus
+                option(value='BEL') Belgium
+                option(value='BLZ') Belize
+                option(value='BEN') Benin
+                option(value='BMU') Bermuda
+                option(value='BTN') Bhutan
+                option(value='BOL') Bolivia, Plurinational State of
+                option(value='BES') Bonaire, Sint Eustatius and Saba
+                option(value='BIH') Bosnia and Herzegovina
+                option(value='BWA') Botswana
+                option(value='BVT') Bouvet Island
+                option(value='BRA') Brazil
+                option(value='IOT') British Indian Ocean Territory
+                option(value='BRN') Brunei Darussalam
+                option(value='BGR') Bulgaria
+                option(value='BFA') Burkina Faso
+                option(value='BDI') Burundi
+                option(value='KHM') Cambodia
+                option(value='CMR') Cameroon
+                option(value='CAN') Canada
+                option(value='CPV') Cape Verde
+                option(value='CYM') Cayman Islands
+                option(value='CAF') Central African Republic
+                option(value='TCD') Chad
+                option(value='CHL') Chile
+                option(value='CHN') China
+                option(value='CXR') Christmas Island
+                option(value='CCK') Cocos (Keeling) Islands
+                option(value='COL') Colombia
+                option(value='COM') Comoros
+                option(value='COG') Congo
+                option(value='COD') Congo, the Democratic Republic of the
+                option(value='COK') Cook Islands
+                option(value='CRI') Costa Rica
+                option(value='CIV') Côte d'Ivoire
+                option(value='HRV') Croatia
+                option(value='CUB') Cuba
+                option(value='CUW') Curaçao
+                option(value='CYP') Cyprus
+                option(value='CZE') Czech Republic
+                option(value='DNK') Denmark
+                option(value='DJI') Djibouti
+                option(value='DMA') Dominica
+                option(value='DOM') Dominican Republic
+                option(value='ECU') Ecuador
+                option(value='EGY') Egypt
+                option(value='SLV') El Salvador
+                option(value='GNQ') Equatorial Guinea
+                option(value='ERI') Eritrea
+                option(value='EST') Estonia
+                option(value='ETH') Ethiopia
+                option(value='FLK') Falkland Islands (Malvinas)
+                option(value='FRO') Faroe Islands
+                option(value='FJI') Fiji
+                option(value='FIN') Finland
+                option(value='FRA') France
+                option(value='GUF') French Guiana
+                option(value='PYF') French Polynesia
+                option(value='ATF') French Southern Territories
+                option(value='GAB') Gabon
+                option(value='GMB') Gambia
+                option(value='GEO') Georgia
+                option(value='DEU') Germany
+                option(value='GHA') Ghana
+                option(value='GIB') Gibraltar
+                option(value='GRC') Greece
+                option(value='GRL') Greenland
+                option(value='GRD') Grenada
+                option(value='GLP') Guadeloupe
+                option(value='GUM') Guam
+                option(value='GTM') Guatemala
+                option(value='GGY') Guernsey
+                option(value='GIN') Guinea
+                option(value='GNB') Guinea-Bissau
+                option(value='GUY') Guyana
+                option(value='HTI') Haiti
+                option(value='HMD') Heard Island and McDonald Islands
+                option(value='VAT') Holy See (Vatican City State)
+                option(value='HND') Honduras
+                option(value='HKG') Hong Kong
+                option(value='HUN') Hungary
+                option(value='ISL') Iceland
+                option(value='IND') India
+                option(value='IDN') Indonesia
+                option(value='IRN') Iran, Islamic Republic of
+                option(value='IRQ') Iraq
+                option(value='IRL') Ireland
+                option(value='IMN') Isle of Man
+                option(value='ISR') Israel
+                option(value='ITA') Italy
+                option(value='JAM') Jamaica
+                option(value='JPN') Japan
+                option(value='JEY') Jersey
+                option(value='JOR') Jordan
+                option(value='KAZ') Kazakhstan
+                option(value='KEN') Kenya
+                option(value='KIR') Kiribati
+                option(value='PRK') Korea, Democratic People's Republic of
+                option(value='KOR') Korea, Republic of
+                option(value='KWT') Kuwait
+                option(value='KGZ') Kyrgyzstan
+                option(value='LAO') Lao People's Democratic Republic
+                option(value='LVA') Latvia
+                option(value='LBN') Lebanon
+                option(value='LSO') Lesotho
+                option(value='LBR') Liberia
+                option(value='LBY') Libya
+                option(value='LIE') Liechtenstein
+                option(value='LTU') Lithuania
+                option(value='LUX') Luxembourg
+                option(value='MAC') Macao
+                option(value='MKD') Macedonia, the former Yugoslav Republic of
+                option(value='MDG') Madagascar
+                option(value='MWI') Malawi
+                option(value='MYS') Malaysia
+                option(value='MDV') Maldives
+                option(value='MLI') Mali
+                option(value='MLT') Malta
+                option(value='MHL') Marshall Islands
+                option(value='MTQ') Martinique
+                option(value='MRT') Mauritania
+                option(value='MUS') Mauritius
+                option(value='MYT') Mayotte
+                option(value='MEX') Mexico
+                option(value='FSM') Micronesia, Federated States of
+                option(value='MDA') Moldova, Republic of
+                option(value='MCO') Monaco
+                option(value='MNG') Mongolia
+                option(value='MNE') Montenegro
+                option(value='MSR') Montserrat
+                option(value='MAR') Morocco
+                option(value='MOZ') Mozambique
+                option(value='MMR') Myanmar
+                option(value='NAM') Namibia
+                option(value='NRU') Nauru
+                option(value='NPL') Nepal
+                option(value='NLD') Netherlands
+                option(value='NCL') New Caledonia
+                option(value='NZL') New Zealand
+                option(value='NIC') Nicaragua
+                option(value='NER') Niger
+                option(value='NGA') Nigeria
+                option(value='NIU') Niue
+                option(value='NFK') Norfolk Island
+                option(value='MNP') Northern Mariana Islands
+                option(value='NOR') Norway
+                option(value='OMN') Oman
+                option(value='PAK') Pakistan
+                option(value='PLW') Palau
+                option(value='PSE') Palestinian Territory, Occupied
+                option(value='PAN') Panama
+                option(value='PNG') Papua New Guinea
+                option(value='PRY') Paraguay
+                option(value='PER') Peru
+                option(value='PHL') Philippines
+                option(value='PCN') Pitcairn
+                option(value='POL') Poland
+                option(value='PRT') Portugal
+                option(value='PRI') Puerto Rico
+                option(value='QAT') Qatar
+                option(value='REU') Réunion
+                option(value='ROU') Romania
+                option(value='RUS') Russian Federation
+                option(value='RWA') Rwanda
+                option(value='BLM') Saint Barthélemy
+                option(value='SHN') Saint Helena, Ascension and Tristan da Cunha
+                option(value='KNA') Saint Kitts and Nevis
+                option(value='LCA') Saint Lucia
+                option(value='MAF') Saint Martin (French part)
+                option(value='SPM') Saint Pierre and Miquelon
+                option(value='VCT') Saint Vincent and the Grenadines
+                option(value='WSM') Samoa
+                option(value='SMR') San Marino
+                option(value='STP') Sao Tome and Principe
+                option(value='SAU') Saudi Arabia
+                option(value='SEN') Senegal
+                option(value='SRB') Serbia
+                option(value='SYC') Seychelles
+                option(value='SLE') Sierra Leone
+                option(value='SGP') Singapore
+                option(value='SXM') Sint Maarten (Dutch part)
+                option(value='SVK') Slovakia
+                option(value='SVN') Slovenia
+                option(value='SLB') Solomon Islands
+                option(value='SOM') Somalia
+                option(value='ZAF') South Africa
+                option(value='SGS') South Georgia and the South Sandwich Islands
+                option(value='SSD') South Sudan
+                option(value='ESP') Spain
+                option(value='LKA') Sri Lanka
+                option(value='SDN') Sudan
+                option(value='SUR') Suriname
+                option(value='SJM') Svalbard and Jan Mayen
+                option(value='SWZ') Swaziland
+                option(value='SWE') Sweden
+                option(value='CHE') Switzerland
+                option(value='SYR') Syrian Arab Republic
+                option(value='TWN') Taiwan, Province of China
+                option(value='TJK') Tajikistan
+                option(value='TZA') Tanzania, United Republic of
+                option(value='THA') Thailand
+                option(value='TLS') Timor-Leste
+                option(value='TGO') Togo
+                option(value='TKL') Tokelau
+                option(value='TON') Tonga
+                option(value='TTO') Trinidad and Tobago
+                option(value='TUN') Tunisia
+                option(value='TUR') Turkey
+                option(value='TKM') Turkmenistan
+                option(value='TCA') Turks and Caicos Islands
+                option(value='TUV') Tuvalu
+                option(value='UGA') Uganda
+                option(value='UKR') Ukraine
+                option(value='ARE') United Arab Emirates
+                option(value='GBR', selected=true) United Kingdom
+                option(value='USA') United States
+                option(value='UMI') United States Minor Outlying Islands
+                option(value='URY') Uruguay
+                option(value='UZB') Uzbekistan
+                option(value='VUT') Vanuatu
+                option(value='VEN') Venezuela, Bolivarian Republic of
+                option(value='VNM') Viet Nam
+                option(value='VGB') Virgin Islands, British
+                option(value='VIR') Virgin Islands, U.S.
+                option(value='WLF') Wallis and Futuna
+                option(value='ESH') Western Sahara
+                option(value='YEM') Yemen
+                option(value='ZMB') Zambia
+                option(value='ZWE') Zimbabwe
+
+            div(class=['input-group', 'margin-bottom-sm'])
+              span.input-group-addon
+                i(class=['fa', 'fa-map-marker', 'fa-fw'])
+              input(type='text', class='form-control', id='city', name='city', placeholder='State/City', required)
+
+            input(type='submit', class=['btn', 'btn-default'], value='Sign Up')
+
+          hr
+
+          p Alternatively, sign up using one of the following:
+          a(class=['btn', 'btn-block', 'btn-social', 'btn-facebook'], href='/auth/facebook')
+              span(class=['fa', 'fa-facebook-f'])
+              | Log in with Facebook
+          a(class=['btn', 'btn-block', 'btn-social', 'btn-google'], href='#')
+              span(class=['fa', 'fa-google-plus'])
+              | Log in with Google
+          a(class=['btn', 'btn-block', 'btn-social', 'btn-twitter'], href='#')
+              span(class=['fa', 'fa-twitter'])
+              | Log in with Twitter
+
+    footer
+      div(class=['container', 'text-center'])
+        p Copyright &copy; Muzik 2016
+
+
+    script(src='../js/static/jquery.js')
+    script(src='../js/static/bootstrap.min.js')
+    script(src='../js/static/jquery.easing.min.js')
+    script(src='../js/static/grayscale.js')

@@ -38,7 +38,11 @@ module.exports = function(passport) {
 
 			User.create({
 				username: email,
-				password: hash
+				password: hash,
+				country: req.body.country,
+				city: req.body.city,
+				genres: req.body.genres,
+				skills: req.body.skills
 				}, function(err, user) {
 					if (err) {
 						return done(err);

@@ -10,6 +10,7 @@ html(class='no-js')
 
       link(rel='stylesheet', href='/css/bootstrap.min.css')
       link(rel='stylesheet', href='/css/grayscale.css')
+      link(rel='stylesheet', href='/css/bootstrap-social.css')
       link(rel='stylesheet', href='/css/lightslider.min.css')
       link(href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css')
       link(href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css')
@@ -29,8 +30,6 @@ html(class='no-js')
             div(class=['collapse', 'navbar-collapse', 'navbar-right', 'navbar-main-collapse'])
                 ul(class=['nav', 'navbar-nav'])
                     li.hidden: a(href='#page-top')
-                    li: a.page-scroll(href='/signup') Signup
-                    li: a.page-scroll(href='/auth/facebook') Facebook
                     li: a.page-scroll(href='#about') About
                     li: a.page-scroll(href='#charts') Charts
                     li: a.page-scroll(href='#explore') Explore
@@ -40,25 +39,40 @@ html(class='no-js')
         div.intro-body
             div.container
                 div.row
-                    div.col-md-6
+                    div.col-md-8#banner
                         h1.brand-heading MUZIK
-                        p.intro-text A free network for musicians and music professionals.                        
+                        p.intro-text A free network for musicians and music professionals.
+                        p Collaborate with fellow musicians to create the best new music on the web.
+                        a(class=['btn', 'btn-primary', 'btn-lg'], href='/signup', role='button') Sign Up
 
-                    div.col-md-6
+                    div.col-md-4#login
                         if (message.length > 0)
                             .alert.alert-danger.alert-dismissible.fade-in(role='alert')
                                 button.close(type='button' data-dismiss='alert' aria-label='Close')
                                     span(aria-hidden='true') x
                                 p= message
 
-                        form(action='/', method='POST', id='login')
-                            div.form-group
-                                label(for='email') Email
+                        form(action='/', method='POST')
+                            div(class=['input-group', 'margin-bottom-sm'])
+                                span.input-group-addon
+                                    i(class=['fa', 'fa-envelope-o', 'fa-fw'])
                                 input(type='email', class='form-control', id='email', name='email', placeholder='Email', required)
-                            div.form-group
-                                label(for='password') Password
+                            div(class=['input-group', 'margin-bottom-sm'])
+                                span.input-group-addon
+                                    i(class=['fa', 'fa-key', 'fa-fw'])
                                 input(type='password', class='form-control', id='password', name='password', placeholder='Password', required)
                             input(type='submit', class=['btn', 'btn-default'], value='Log In')
+
+                        hr
+                        a(class=['btn', 'btn-block', 'btn-social', 'btn-facebook'], href='/auth/facebook')
+                            span(class=['fa', 'fa-facebook-f'])
+                            | Log in with Facebook
+                        a(class=['btn', 'btn-block', 'btn-social', 'btn-google'], href='#')
+                            span(class=['fa', 'fa-google-plus'])
+                            | Log in with Google
+                        a(class=['btn', 'btn-block', 'btn-social', 'btn-twitter'], href='#')
+                            span(class=['fa', 'fa-twitter'])
+                            | Log in with Twitter
 
                     div(class=['col-md-12', 'text-center'])
                         a(class=['btn', 'btn-circle', 'page-scroll'], href='#about')
@@ -85,7 +99,10 @@ html(class='no-js')
                         h3 Collaborate
                         p Create and join projects and upload your work to create the next big hit.
 
-    section#charts(class=['container', 'content-section', 'text-center'])
+                a(class=['btn', 'btn-primary', 'btn-lg'], href='/signup', role='button') Sign Up
+        hr
+
+    section#charts(class=['container', 'text-center'])
         div.row
             div(class=['col-lg-12'])
                 h2 Muzik Charts
@@ -139,9 +156,11 @@ html(class='no-js')
                         h3 Artist - Song
                         p This is number ten
 
+        hr
+
     section#explore(class=['container', 'content-section', 'text-center'])
         div.row
-            div(class=['col-lg-12'])
+            div(class=['col-lg-8', 'col-lg-offset-2'])
                 h2 Discover &amp; Explore
                 p Looking for that final piece of the jigsaw for your next killer tune? Look no further.
                 div.btn-group
@@ -156,11 +175,13 @@ html(class='no-js')
                         li: a(href='#') Producers
                         li: a(href='#') Promoters
 
+        hr
+
     section#social(class=['container', 'content-section', 'text-center'])
         div.row
-            div(class=['col-lg-12'])
+            div(class=['col-lg-8', 'col-lg-offset-2'])
                 h2 Latest News
-                p Muzik is currently being constructed, keep revisiting for updates, check us out on social media, or #[a(href='mailto:poc275@gmail.com') drop us a line].
+                p Muzik is currently being constructed. Keep revisiting for updates, check us out on social media, or #[a(href='mailto:poc275@gmail.com') drop us a line].
                 ul(class=['list-inline', 'banner-social-buttons'])
                     li
                         a(href='#', class=['btn', 'btn-default', 'btn-lg'])

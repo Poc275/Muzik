@@ -1,20 +1,65 @@
-extends layout
+doctype html
+html(class='no-js')
+  head
+      meta(charset='utf-8')
+      meta(http-equiv='X-UA-Compatible', content='IE=edge')
+      meta(name='viewport', content='width=device-width, initial-scale=1')
+      meta(name='description', content='')
 
-block content
-    h1 Profile page
-    p: a(href='/logout') Logout
-    
-    h2 Welcome
-    p= user._node._id
-    p= user._node.labels
-    p= user._node.properties.username
-    p= user._node.properties.password
+      title Muzik Profile
 
-    //canvas#player
-    //canvas#track
-    canvas#project
-    button#play(value="Play") Play
-    button#stop Stop
+      link(rel='stylesheet', href='/css/bootstrap.min.css')
+      link(rel='stylesheet', href='/css/grayscale.css')
+      link(rel='stylesheet', href='/css/bootstrap-social.css')
+      link(rel='stylesheet', href='/css/lightslider.min.css')
+      link(href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css')
+      link(href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css')
+
+      script(src='https://use.fontawesome.com/bc36022cc0.js')
+
+  body#page-top(data-spy='scroll', data-target='.navbar-fixed-top')
+    nav#alt(class=['navbar', 'navbar-custom', 'navbar-fixed-top'], role='navigation')
+      div.container
+        div.navbar-header
+          a(href='/', class=['navbar-brand', 'page-scroll'])
+            i(class=['fa', 'fa-play-circle'])
+            span.light  MUZIK
+        div(class=['collapse', 'navbar-collapse', 'navbar-right', 'navbar-main-collapse'])
+          ul(class=['nav', 'navbar-nav'])
+              li.hidden: a(href='#page-top')
+              li: a(href='#')
+                i(class=['fa', 'fa-user'])
+                =user._node.properties.username
+              li: a(href='/logout') Log Out
+
+    section#signup(class=['container', 'content-section'])
+      div.row
+        div(class=['col-lg-12'])
+            h1 Profile page
+            
+            h2 Welcome
+            p= user._node._id
+            p= user._node.labels
+            p= user._node.properties.username
+            p= user._node.properties.password
+            p= user._node.properties.country
+            p= user._node.properties.city
+            p= user._node.properties.genres
+            p= user._node.properties.skills
+
+            canvas#project
+            button#play(value="Play") Play
+            button#stop Stop
+
+    footer
+      div(class=['container', 'text-center'])
+        p Copyright &copy; Muzik 2016
+
+
+    script(src='../js/static/jquery.js')
+    script(src='../js/static/bootstrap.min.js')
+    script(src='../js/static/jquery.easing.min.js')
+    script(src='../js/static/grayscale.js')
 
 
     //script(src="/js/web-audio-viz.js")
